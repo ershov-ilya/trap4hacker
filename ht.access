@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /
+
+# trap4hacker
+RewriteCond %{REQUEST_URI} ^/administrator.*$ [OR] 
+RewriteCond %{REQUEST_URI} ^/admin.*$ [OR] 
+RewriteCond %{REQUEST_URI} ^/wp-admin.*$
+RewriteRule ^(.*)$ trap4hacker/index.php [L,QSA]
