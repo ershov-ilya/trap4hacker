@@ -2,6 +2,7 @@ RewriteEngine On
 RewriteBase /
 
 # trap4hacker
+#RewriteCond %{REQUEST_URI} ^/manager.*$ [OR] # Раскомментировать, если вы вынесли админку MODX в отдельную папку
 RewriteCond %{REQUEST_URI} ^/administrator.*$ [OR] 
 RewriteCond %{REQUEST_URI} ^/admin.*$ [OR] 
 RewriteCond %{REQUEST_URI} ^/wp-admin.*$
