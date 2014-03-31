@@ -46,7 +46,7 @@ $output.="HTTP_USER_AGENT	".$_SERVER['HTTP_USER_AGENT']."\n";
 $output.="REQUEST_URI		".$_SERVER['REQUEST_URI']."\n";
 if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
-$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
+//$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
 logWrite($output,$fhBuf);
 
 //logWrite(microtime(true) - $startTime, $fhBuf);
