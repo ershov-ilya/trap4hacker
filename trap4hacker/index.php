@@ -8,6 +8,8 @@ else $_SESSION['attempt_num']++;
 
 define(DEBUG, false);
 
+@include "ip_base.php";
+
 // Конфиг
 $path	=	'';
 $filename = 'log.txt';
@@ -47,6 +49,8 @@ $output.="REQUEST_URI		".$_SERVER['REQUEST_URI']."\n";
 if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
+if(function_exists(ResolveIP))
+$output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
 logWrite($output,$fhBuf);
 
 //logWrite(microtime(true) - $startTime, $fhBuf);
