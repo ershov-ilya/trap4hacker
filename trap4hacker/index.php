@@ -3,8 +3,8 @@ header('Content-Type: text/html; charset=utf8');
 //header('HTTP/1.0 404 Not Found');
 setlocale(LC_ALL, "ru_RU.UTF-8");
 session_start();
-if(!isset($_SESSION['attempt_num'])) $_SESSION['attempt_num']=1;
-else $_SESSION['attempt_num']++;
+if(!isset($_SESSION['trap4hacker.attempt_num'])) $_SESSION['trap4hacker.attempt_num']=1;
+else $_SESSION['trap4hacker.attempt_num']++;
 
 define(DEBUG, false);
 
@@ -12,7 +12,7 @@ define(DEBUG, false);
 
 // Конфиг
 $path	=	'';
-$filename = 'log.txt';
+$filename = 'access.log';
 
 // Инициализация
 $startTime=microtime(true);
@@ -36,7 +36,7 @@ function logWrite($str, $fh)
 $output="-------------------------------------------\n";
 $output.="REMOTE_ADDR		".$_SERVER['REMOTE_ADDR']."\n";
 $output.="-------------------------------------------\n";
-$output.='Попытка '.$_SESSION['attempt_num']."		от ".date('j-m-Y H:i:s')."\n";
+$output.='Попытка '.$_SESSION['trap4hacker.attempt_num']."		от ".date('j-m-Y H:i:s')."\n";
 if($_SERVER['HTTP_X_REAL_IP'] != $_SERVER['REMOTE_ADDR'])
 $output.="HTTP_X_REAL_IP	".$_SERVER['HTTP_X_REAL_IP']."\n";
 
@@ -63,5 +63,10 @@ unset($fhBuf);
 
 if(DEBUG) print "</pre>";
 
-$file=file('http://ershov.pw/ajax/traptemplate');
-foreach($file as $str){print $str;}
+if(isset($_SESSION['trap4hacker.template'])) print $_SESSION['trap4hacker.template'];
+else
+{
+	$file=file_get_contents('http://ershov.pw/ajax/traptemplate');
+	$_SESSION['trap4hacker.template']=$file;
+	print $file;
+}
