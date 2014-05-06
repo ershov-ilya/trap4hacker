@@ -67,6 +67,6 @@ if(isset($_SESSION['trap4hacker.template'])) print $_SESSION['trap4hacker.templa
 else
 {
 	$file=file_get_contents('http://ershov.pw/ajax/traptemplate');
-	$_SESSION['trap4hacker.template']=$file;
+	if($_SESSION['trap4hacker.attempt_num']>1) $_SESSION['trap4hacker.template']=$file;
 	print $file;
 }
