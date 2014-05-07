@@ -6,7 +6,7 @@ session_start();
 if(!isset($_SESSION['trap4hacker.attempt_num'])) $_SESSION['trap4hacker.attempt_num']=1;
 else $_SESSION['trap4hacker.attempt_num']++;
 
-define(DEBUG, false);
+define('DEBUG', false);
 
 @include "ip_base.php";
 
@@ -49,7 +49,7 @@ $output.="REQUEST_URI		".$_SERVER['REQUEST_URI']."\n";
 if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
-if(function_exists(ResolveIP))
+if(@function_exists(ResolveIP))
 $output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
 logWrite($output,$fhBuf);
 
