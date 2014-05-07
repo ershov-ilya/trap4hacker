@@ -9,11 +9,13 @@ else $_SESSION['trap4hacker.attempt_num']++;
 define('DEBUG', false);
 
 @include "ip_base.php";
-include "getactualcache.php";
+require "getactualcache.php";
 
 // Конфиг
 $path	=	'';
 $filename = 'access.log';
+$template_cache_filename='template.cache';
+$template_source_path='http://ershov.pw/ajax/traptemplate';
 
 // Инициализация
 $startTime=microtime(true);
@@ -65,4 +67,4 @@ unset($fhBuf);
 if(DEBUG) print "</pre>";
 
 // Template caching system
-print getActualCache('template.cache', 86400, 'http://ershov.pw/ajax/traptemplate');
+print getActualCache($template_cache_filename, 86400, $template_source_path);
