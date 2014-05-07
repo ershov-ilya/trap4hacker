@@ -63,10 +63,45 @@ unset($fhBuf);
 
 if(DEBUG) print "</pre>";
 
-if(isset($_SESSION['trap4hacker.template'])) print $_SESSION['trap4hacker.template'];
+/*    Template caching system
+---------------------------------------------------------------------------*/
+$templateSourcePath='http://ershov.pw/ajax/traptemplate';
+$cacheFilename='template.cache';
+$cachePath='';
+$cacheFilenameAgeLimit=86400;
+
+$fMakeTemplateCache=false;
+if(is_file($cachePath.$cacheFilename))
+{
+    $filetime= filemtime($cachePath.$cacheFilename);
+    $curtime=time();
+    $cacheFilenameAge=$curtime-$filetime;
+    if($cacheFilenameAge>$cacheFilenameAgeLimit) $fMakeTemplateCache=true;
+}
+else $fMakeTemplateCache=true;
+
+if($fMakeTemplateCache)
+{
+    //print "Write new cache";
+    // Write new cache
+    $cacheContent=file_get_contents($templateSourcePath);
+    // Открытие текстовых файлов
+    $fhCache = fopen($cachePath.$cacheFilename, "w");
+    $locked = flock($fhCache, LOCK_EX | LOCK_NB);
+    if(!$locked) {
+        echo 'Не удалось получить блокировку';
+        exit(-1);
+    }
+    fwrite($fhCache, $cacheContent);
+}
 else
 {
-	$file=file_get_contents('http://ershov.pw/ajax/traptemplate');
-	if($_SESSION['trap4hacker.attempt_num']>1) $_SESSION['trap4hacker.template']=$file;
-	print $file;
+    //print "Read from cache";
+    // Read from cache
+    $cacheContent=file_get_contents($cachePath.$cacheFilename);
 }
+// Output template
+print $cacheContent;
+
+/*     /Template caching system
+---------------------------------------------------------------------------*/
