@@ -9,6 +9,7 @@ else $_SESSION['trap4hacker.attempt_num']++;
 define('DEBUG', false);
 
 @include "ip_base.php";
+include "getactualcache.php";
 
 // Конфиг
 $path	=	'';
@@ -49,7 +50,7 @@ $output.="REQUEST_URI		".$_SERVER['REQUEST_URI']."\n";
 if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
-if(@function_exists(ResolveIP))
+if(function_exists('ResolveIP'))
 $output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
 logWrite($output,$fhBuf);
 
@@ -63,45 +64,5 @@ unset($fhBuf);
 
 if(DEBUG) print "</pre>";
 
-/*    Template caching system
----------------------------------------------------------------------------*/
-$templateSourcePath='http://ershov.pw/ajax/traptemplate';
-$cacheFilename='template.cache';
-$cachePath='';
-$cacheFilenameAgeLimit=86400;
-
-$fMakeTemplateCache=false;
-if(is_file($cachePath.$cacheFilename))
-{
-    $filetime= filemtime($cachePath.$cacheFilename);
-    $curtime=time();
-    $cacheFilenameAge=$curtime-$filetime;
-    if($cacheFilenameAge>$cacheFilenameAgeLimit) $fMakeTemplateCache=true;
-}
-else $fMakeTemplateCache=true;
-
-if($fMakeTemplateCache)
-{
-    //print "Write new cache";
-    // Write new cache
-    $cacheContent=file_get_contents($templateSourcePath);
-    // Открытие текстовых файлов
-    $fhCache = fopen($cachePath.$cacheFilename, "w");
-    $locked = flock($fhCache, LOCK_EX | LOCK_NB);
-    if(!$locked) {
-        echo 'Не удалось получить блокировку';
-        exit(-1);
-    }
-    fwrite($fhCache, $cacheContent);
-}
-else
-{
-    //print "Read from cache";
-    // Read from cache
-    $cacheContent=file_get_contents($cachePath.$cacheFilename);
-}
-// Output template
-print $cacheContent;
-
-/*     /Template caching system
----------------------------------------------------------------------------*/
+// Template caching system
+print getActualCache('template.cache', 86400, 'http://ershov.pw/ajax/traptemplate');
