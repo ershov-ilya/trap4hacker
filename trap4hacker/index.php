@@ -6,10 +6,14 @@ session_start();
 if(!isset($_SESSION['trap4hacker.attempt_num'])) $_SESSION['trap4hacker.attempt_num']=1;
 else $_SESSION['trap4hacker.attempt_num']++;
 
-define('DEBUG', false);
+define('DEBUG', true);
 
-@include "ip_base.php";
 require "getactualcache.php";
+function getIPinfo($ip)
+{
+    $res=$json = file_get_contents('http://api.sypexgeo.net/json/'.$ip);
+    return json_decode($res);
+}
 
 // Конфиг
 $path	=	'';
@@ -20,11 +24,12 @@ $template_source_path='http://ershov.pw/ajax/traptemplate';
 // Инициализация
 $startTime=microtime(true);
 if(DEBUG) print "<pre>\n";
+if(DEBUG) print "DEBUG mode\n";
 // Открытие текстовых файлов
 $fhBuf = fopen($path.$filename, "a");
 $locked = flock($fhBuf, LOCK_EX | LOCK_NB);
 if(!$locked) {
-    echo 'Не удалось получить блокировку';
+    if(DEBUG) echo 'Не удалось получить блокировку';
     exit(-1);
 }
 
@@ -52,7 +57,10 @@ $output.="REQUEST_URI		".$_SERVER['REQUEST_URI']."\n";
 if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
-if(function_exists('ResolveIP'))
+
+// if(function_exists('ResolveIP'))
+
+
 $output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
 logWrite($output,$fhBuf);
 
