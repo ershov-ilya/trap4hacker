@@ -40,13 +40,24 @@ if(DEBUG) { print_r($info); print "\n";}
 
 // Открытие текстовых файлов
 $fhBuf = fopen($path.$filename, "a");
-$locked = flock($fhBuf, LOCK_EX | LOCK_NB);
+
+$locked=null;
+$attempts = 100;
+
+while(!$locked && $attempts>0)
+{
+    $locked = flock($fhBuf, LOCK_EX | LOCK_NB);
+    if($locked) break;
+    usleep(30000);
+    $attempts--;
+}
+
 if(!$locked) {
     if(DEBUG) echo "Не удалось получить блокировку\n";
     exit(-1);
 }
-
-if($locked) {
+else
+{
     if(DEBUG) echo "Блокировка на файл получена\n";
     $output = "-------------------------------------------\n";
     $output .= "REMOTE_ADDR		" . $_SERVER['REMOTE_ADDR'] . "\n";
@@ -68,6 +79,7 @@ if($locked) {
     if (!empty($info->country->name_ru)) $output .= "Страна\t\t\t" . $info->country->name_ru . "\n";
     if (!empty($info->city->name_ru)) $output .= "Город\t\t\t" . $info->city->name_ru . "\n";
     if (!empty($info->region->name_ru)) $output .= "Регион\t\t\t" . $info->region->name_ru . "\n";
+    if (!empty($info->request)) $output .= "Запрос к  API Sypex\t" . $info->request . "\n";
 
     logWrite($output, $fhBuf);
 
