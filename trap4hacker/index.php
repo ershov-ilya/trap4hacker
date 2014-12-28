@@ -9,10 +9,18 @@ else $_SESSION['trap4hacker.attempt_num']++;
 define('DEBUG', true);
 
 require "getactualcache.php";
+
 function getIPinfo($ip)
 {
     $res=$json = file_get_contents('http://api.sypexgeo.net/json/'.$ip);
     return json_decode($res);
+}
+
+// Функции
+function logWrite($str, $fh)
+{
+    if(DEBUG) print "$str\n";
+    if(!DEBUG) fwrite($fh, "$str\n");
 }
 
 // Конфиг
@@ -25,23 +33,23 @@ $template_source_path='http://ershov.pw/ajax/traptemplate';
 $startTime=microtime(true);
 if(DEBUG) print "<pre>\n";
 if(DEBUG) print "DEBUG mode\n";
+
+$info = getIPinfo($_SERVER['REMOTE_ADDR']);
+if(DEBUG) { print_r($info); print "\n";}
+
+
 // Открытие текстовых файлов
 $fhBuf = fopen($path.$filename, "a");
 $locked = flock($fhBuf, LOCK_EX | LOCK_NB);
 if(!$locked) {
-    if(DEBUG) echo 'Не удалось получить блокировку';
+    if(DEBUG) echo "Не удалось получить блокировку\n";
     exit(-1);
 }
-
-// Функции
-function logWrite($str, $fh)
-{
-	if(DEBUG) print "$str\n";
-	fwrite($fh, "$str\n");
+else{
+    if(DEBUG) echo "Блокировка на файл получена\n";
 }
 
-
-$output="-------------------------------------------\n";
+    $output="-------------------------------------------\n";
 $output.="REMOTE_ADDR		".$_SERVER['REMOTE_ADDR']."\n";
 $output.="-------------------------------------------\n";
 $output.='Попытка '.$_SESSION['trap4hacker.attempt_num']."		от ".date('j-m-Y H:i:s')."\n";
@@ -59,9 +67,7 @@ $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
 
 // if(function_exists('ResolveIP'))
-
-
-$output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
+//$output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
 logWrite($output,$fhBuf);
 
 //logWrite(microtime(true) - $startTime, $fhBuf);
@@ -75,4 +81,4 @@ unset($fhBuf);
 if(DEBUG) print "</pre>";
 
 // Template caching system
-print getActualCache($template_cache_filename, 86400, $template_source_path);
+if(!DEBUG) print getActualCache($template_cache_filename, 86400, $template_source_path);
