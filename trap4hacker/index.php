@@ -76,9 +76,11 @@ else
         $output .= "QUERY_STRING		" . $_SERVER['QUERY_STRING'] . "\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
 
-    if (!empty($info->country->name_ru)) $output .= "Страна\t\t\t" . $info->country->name_ru . "\n";
-    if (!empty($info->city->name_ru)) $output .= "Город\t\t\t" . $info->city->name_ru . "\n";
-    if (!empty($info->region->name_ru)) $output .= "Регион\t\t\t" . $info->region->name_ru . "\n";
+    if (!empty($info->city->name_ru)) $output .= "Город\t\t\t" . $info->city->name_ru;
+    if (!empty($info->region->name_ru)) $output .= " - регион: " . $info->region->name_ru;
+    if (!empty($info->country->name_ru)) $output .= " - " . $info->country->name_ru;
+    $output .= "\n";
+
     if (!empty($info->request)) $output .= "Запрос к  API Sypex\t" . $info->request . "\n";
 
     logWrite($output, $fhBuf);
