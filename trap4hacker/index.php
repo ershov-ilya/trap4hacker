@@ -6,7 +6,7 @@ session_start();
 if(!isset($_SESSION['trap4hacker.attempt_num'])) $_SESSION['trap4hacker.attempt_num']=1;
 else $_SESSION['trap4hacker.attempt_num']++;
 
-define('DEBUG', true);
+define('DEBUG', false);
 
 require "getactualcache.php";
 
