@@ -2,8 +2,11 @@ RewriteEngine On
 RewriteBase /
 
 # trap4hacker
-#RewriteCond %{REQUEST_URI} ^/manager.*$ [OR] # Раскомментировать, если вы вынесли админку MODX в отдельную папку
-RewriteCond %{REQUEST_URI} ^/bitrix.*$ [OR] 
+#RewriteCond %{REQUEST_URI} ^/phpmyadmin.*$ [OR] # Раскомментировать, если нет конфликта с phpmyadmin
+#RewriteCond %{REQUEST_URI} ^/pma.*$ [OR]       # Раскомментировать, если нет конфликта с phpmyadmin
+#RewriteCond %{REQUEST_URI} ^/manager.*$ [OR]   # Раскомментировать, если вы вынесли админку MODX в отдельную папку
+#RewriteCond %{REQUEST_URI} ^/simpla.*$ [OR]    # Раскомментировать, если у вас не Симпла
+RewriteCond %{REQUEST_URI} ^/bitrix.*$ [OR]
 RewriteCond %{REQUEST_URI} ^/administrator.*$ [OR] 
 RewriteCond %{REQUEST_URI} ^/wp-admin.*$ [OR] 
 RewriteCond %{REQUEST_URI} ^/wp-login.*$ [OR] 
