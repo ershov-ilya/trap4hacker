@@ -49,7 +49,7 @@ else{
     if(DEBUG) echo "Блокировка на файл получена\n";
 }
 
-    $output="-------------------------------------------\n";
+$output="-------------------------------------------\n";
 $output.="REMOTE_ADDR		".$_SERVER['REMOTE_ADDR']."\n";
 $output.="-------------------------------------------\n";
 $output.='Попытка '.$_SESSION['trap4hacker.attempt_num']."		от ".date('j-m-Y H:i:s')."\n";
@@ -66,8 +66,10 @@ if(!empty($_SERVER['QUERY_STRING']))
 $output.="QUERY_STRING		".$_SERVER['QUERY_STRING']."\n";
 //$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
 
-// if(function_exists('ResolveIP'))
-//$output.="Регион			".ResolveIP($_SERVER['REMOTE_ADDR'])."\n";
+if(!empty($info->country->name_ru)) $output.="Страна              ".$info->country->name_ru."\n";
+if(!empty($info->city->name_ru)) $output.="Город	    	    ".$info->city->name_ru."\n";
+if(!empty($info->region->name_ru)) $output.="Регион     	    ".$info->region->name_ru."\n";
+
 logWrite($output,$fhBuf);
 
 //logWrite(microtime(true) - $startTime, $fhBuf);
