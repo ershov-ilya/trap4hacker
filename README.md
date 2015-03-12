@@ -1,5 +1,20 @@
-## Trap for hacker
+Trap for hacker
 ========
+
+A simple script to record all attempts to enter the website admin panel. Records time, the number of attempts, the address where the knocking, IP address, HTTP_USER_AGENT string and an attempt is made to obtain the DNS host name by IP, if it is possible - that is also recorded. Also recorded the parameter string GET request, so we can write all kinds of attempts to injection.
+
+With .htaccess you can emulate the way to the various CMS.
+
+Sample .htaccess file is given in ht.access. This piece of code should be included at the beginning of .htaccess, immediately after RewriteEngine On RewriteBase /
+
+Setting
+
+Trap4hacker throw folder in the root of the site (although if you feel like it and you can put a little deeper, but then you have to observe all the way) include a piece of code from ht.access in your .htaccess, front part of the Friendly URLs - EVERYTHING.
+
+Journal of intrusion attempts will be conducted in the file log.txt.
+
+По-русски
+------
 Автор: Илья Ершов http://ershov.pw
 
 Простой скрипт для записи всех попыток входа в админ панель сайта.
