@@ -1,0 +1,5 @@
+AddDefaultCharset utf-8
+
+<Files "*.log">
+	Deny from all
+</Files>
