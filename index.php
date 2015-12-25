@@ -74,25 +74,29 @@ else
 
     $output .= "HTTP_USER_AGENT\t\t" . $_SERVER['HTTP_USER_AGENT'] . "\n";
     $output .= "REQUEST_URI		" . $_SERVER['REQUEST_URI'] . "\n";
-    if (!empty($_SERVER['QUERY_STRING']))
-        $output .= "QUERY_STRING		" . $_SERVER['QUERY_STRING'] . "\n";
+    //if (!empty($_SERVER['QUERY_STRING']))
+    //    $output .= "QUERY_STRING		" . $_SERVER['QUERY_STRING'] . "\n";
 
+    // Log data to file
+    if(!empty($_GET)){
+        $output .= 'GET:'.PHP_EOL;
+        foreach($_GET as $k=>$v){
+            $output.="$k=$v\n";
+        }
+    }
+    if(!empty($_POST)){
+        $output .= 'POST:'.PHP_EOL;
+        foreach($_POST as $k=>$v){
+            $output .="$k=$v\n";
+        }
+    }
+ 
     if (!empty($info->city->name_ru)) $output .= "Город\t\t\t" . $info->city->name_ru;
     if (!empty($info->region->name_ru)) $output .= " - регион: " . $info->region->name_ru;
     if (!empty($info->country->name_ru)) $output .= " - " . $info->country->name_ru;
     $output .= "\n";
 
-    // Log data to file
-    $output = 'GET:'.PHP_EOL;
-    foreach($_GET as $k=>$v){
-        $output.="$k=$v\n";
-    }
-
-    $output .= 'POST:'.PHP_EOL;
-    foreach($_POST as $k=>$v){
-        $output .="$k=$v\n";
-    }
-
+   
     if (!empty($info->request)) $output .= "Запрос к  API Sypex\t" . $info->request . "\n";
 
     logWrite($output, $fhBuf);
