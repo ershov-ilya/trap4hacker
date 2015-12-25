@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: text/html; charset=utf8');
 //header('HTTP/1.0 404 Not Found');
 setlocale(LC_ALL, "ru_RU.UTF-8");
@@ -6,10 +6,12 @@ session_start();
 if(!isset($_SESSION['trap4hacker.attempt_num'])) $_SESSION['trap4hacker.attempt_num']=1;
 else $_SESSION['trap4hacker.attempt_num']++;
 
-define('DEBUG', false);
+if(isset($_GET['t'])) define('DEBUG' , true) ;
+defined( 'DEBUG') or define('DEBUG' , false) ;
 
 require "getactualcache.php";
 
+// Sypex GEO API call
 function getIPinfo($ip)
 {
     $res=$json = file_get_contents('http://api.sypexgeo.net/json/'.$ip);
@@ -74,7 +76,6 @@ else
     $output .= "REQUEST_URI		" . $_SERVER['REQUEST_URI'] . "\n";
     if (!empty($_SERVER['QUERY_STRING']))
         $output .= "QUERY_STRING		" . $_SERVER['QUERY_STRING'] . "\n";
-//$output.="REQUEST_TIME		".$_SERVER['REQUEST_TIME']."\n";
 
     if (!empty($info->city->name_ru)) $output .= "Город\t\t\t" . $info->city->name_ru;
     if (!empty($info->region->name_ru)) $output .= " - регион: " . $info->region->name_ru;
@@ -82,12 +83,12 @@ else
     $output .= "\n";
 
     // Log data to file
-    $output ='GET:'.PHP_EOL;
+    $output = 'GET:'.PHP_EOL;
     foreach($_GET as $k=>$v){
         $output.="$k=$v\n";
     }
 
-    $output .=PHP_EOL.'POST:'.PHP_EOL;
+    $output .= 'POST:'.PHP_EOL;
     foreach($_POST as $k=>$v){
         $output .="$k=$v\n";
     }
@@ -96,8 +97,7 @@ else
 
     logWrite($output, $fhBuf);
 
-//logWrite(microtime(true) - $startTime, $fhBuf);
-// Закрываем файл
+    // Закрываем файл
     fflush($fhBuf) or die($php_errormsg);
     flock($fhBuf, LOCK_UN) or die($php_errormsg);
     fclose($fhBuf) or die($php_errormsg);
