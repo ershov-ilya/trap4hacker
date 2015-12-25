@@ -1,3 +1,6 @@
+access.log
+template.cache
+
 #################
 ## Eclipse
 #################
@@ -218,3 +221,5 @@ pip-log.txt
 ## phpStorm
 #############
 .idea/
+
+
